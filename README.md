@@ -19,3 +19,17 @@ Key visual features:
 - Want modern UX with zero setup → **Warp**
 
 Given your Stack Deck + multi-monitor setup, iTerm2's saved arrangements + profile colouring per environment (NESO prod / dev / local homelab) would map well to how you already work.
+
+---
+
+## 📚 Documentation Index
+
+### ⚡ Warp Guides (`docs/warp/`)
+- [Warp AI Features](docs/warp/warp-ai-features.md)
+- [Warp Credits Usage](docs/warp/warp-credits-usage.md)
+- [Warp xAI & Project Management](docs/warp/warp-xai-and-project-management.md)
+- [How Warp Makes Money](docs/warp/HOW_WARP_MAKES_MONEY.md)
+- [Git Commit History in Warp](docs/warp/git-commit-history.md)
+
+### ⚖️ Comparisons (`docs/comparisons/`)
+- [Why iTerm2 vs Warp with Claude](docs/comparisons/why-iterm-vs-warp-with-claude.md)
