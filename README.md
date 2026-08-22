@@ -59,6 +59,7 @@ iterm_clear_badge          # Clear badge
 ## 📚 Documentation Index
 
 ### 🖥️ iTerm2 (`docs/iterm2/`)
+- [Live Sessions Snapshot (22 Aug 2026)](docs/iterm2/2026-08-22-live-sessions-snapshot.md)
 - [How to Use Watermarks & Profiles Guide](docs/iterm2/HOW_TO_USE_WATERMARKS_AND_PROFILES.md)
 - [Distinct Color Profiles & Headlines Log](docs/iterm2/2026-08-22-distinct-color-profiles-and-headlines.md)
 

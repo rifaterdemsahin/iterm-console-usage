@@ -268,6 +268,59 @@ async def cmd_style(connection, args):
     print(f"✅ Applied palette '{matched_palette}' with badge/headline '{args.headline or matched_palette}' to session {session.session_id}.")
 
 
+async def cmd_snapshot(connection, args):
+    """Snapshot all open iTerm2 windows, tabs, sessions, badges, and paths to a markdown file."""
+    app = await iterm2.async_get_app(connection)
+    
+    output_path = Path(args.output) if args.output else Path(__file__).resolve().parent.parent / "docs" / "iterm2" / "live-sessions-snapshot.md"
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    lines = [
+        "# iTerm2 Live Sessions Snapshot",
+        "",
+        f"> **Captured at**: `2026-08-22`  ",
+        f"> **Total Windows**: {len(app.terminal_windows)}  ",
+        "",
+        "---",
+        ""
+    ]
+
+    total_panes = 0
+
+    for win_idx, window in enumerate(app.terminal_windows, 1):
+        win_title = await window.async_get_variable("window.titleOverride") or f"Window {win_idx}"
+        lines.append(f"## 🖥️ Window {win_idx}: {win_title}")
+        lines.append(f"- **Window ID**: `{window.window_id}`")
+        lines.append(f"- **Total Tabs**: {len(window.tabs)}")
+        lines.append("")
+        lines.append("| Tab | Pane | Headline / Badge | Session Name | Running Job | Path / Project | TTY | Session ID |")
+        lines.append("|---|---|---|---|---|---|---|---|")
+
+        for tab_idx, tab in enumerate(window.tabs, 1):
+            for sess_idx, session in enumerate(tab.sessions, 1):
+                total_panes += 1
+                name = await session.async_get_variable("session.name") or "-"
+                badge = await session.async_get_variable("session.badge") or "-"
+                job = await session.async_get_variable("session.jobName") or "-"
+                tty = await session.async_get_variable("session.tty") or "-"
+                path = await session.async_get_variable("session.path") or "-"
+                
+                # Truncate path for readability if under home
+                home = str(Path.home())
+                short_path = path.replace(home, "~") if path.startswith(home) else path
+
+                lines.append(f"| Tab {tab_idx} | Pane {sess_idx} | **{badge}** | `{name}` | `{job}` | `{short_path}` | `{tty}` | `{session.session_id}` |")
+
+        lines.append("")
+        lines.append("---")
+        lines.append("")
+
+    lines.insert(4, f"> **Total Panes / Sessions**: {total_panes}")
+
+    output_path.write_text("\n".join(lines), encoding="utf-8")
+    print(f"✅ Saved live session snapshot ({total_panes} sessions) to:\n   {output_path}")
+
+
 async def cmd_auto_distribute(connection, args):
     """Automatically assign rotating distinct contrast palettes and headlines across all sessions."""
     app = await iterm2.async_get_app(connection)
@@ -346,6 +399,10 @@ Examples:
     p_auto = subparsers.add_parser("auto-style", help="Distribute rotating distinct contrast palettes and headlines across all sessions")
     p_auto.add_argument("--prefix", default=None, help="Optional headline prefix (e.g. WORK, AGENT, PANE)")
 
+    # snapshot
+    p_snap = subparsers.add_parser("snapshot", help="Save a markdown inventory snapshot of all open windows and panes")
+    p_snap.add_argument("--output", "-o", default=None, help="Custom output markdown file path")
+
     # install-profiles
     subparsers.add_parser("install-profiles", help="Install contrast-shells.json into iTerm2 DynamicProfiles directory")
 
@@ -364,6 +421,8 @@ Examples:
             await cmd_style(connection, args)
         elif args.command == "auto-style":
             await cmd_auto_distribute(connection, args)
+        elif args.command == "snapshot":
+            await cmd_snapshot(connection, args)
 
     try:
         iterm2.run_until_complete(async_main)
