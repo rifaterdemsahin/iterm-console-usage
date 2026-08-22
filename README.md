@@ -22,7 +22,45 @@ Given your Stack Deck + multi-monitor setup, iTerm2's saved arrangements + profi
 
 ---
 
+## 🛠️ iTerm2 Automation & Watermark Tools
+
+This repository includes CLI and shell tools to inspect running iTerm2 sessions, set watermark badges, lock session headlines, and apply high-contrast color palettes.
+
+### Quick Commands
+
+```bash
+# 1. List all active windows, panes, watermark badges, and running jobs
+./scripts/iterm.sh list
+
+# 2. Add or update watermark badge on active pane (or specific session / all sessions)
+./scripts/iterm.sh watermark --session current --text "NESO-PROD"
+
+# 3. Apply high-contrast palette with locked headline
+./scripts/iterm.sh style --session current --palette "Navy White" --headline "CLAUDE-MAIN"
+
+# 4. Auto-distribute distinct colors across all open sessions
+./scripts/iterm.sh auto-style --prefix "AGENT"
+
+# 5. Install Dynamic Profiles to macOS iTerm2 configuration
+./scripts/iterm.sh install-profiles
+```
+
+### In-Session Shell Escape Helpers (No Python Required)
+
+```bash
+source scripts/watermark_helpers.sh
+iterm_badge "CLAUDE-A"     # Set badge in current pane
+iterm_title "Prod Task"    # Set pane title
+iterm_clear_badge          # Clear badge
+```
+
+---
+
 ## 📚 Documentation Index
+
+### 🖥️ iTerm2 (`docs/iterm2/`)
+- [How to Use Watermarks & Profiles Guide](docs/iterm2/HOW_TO_USE_WATERMARKS_AND_PROFILES.md)
+- [Distinct Color Profiles & Headlines Log](docs/iterm2/2026-08-22-distinct-color-profiles-and-headlines.md)
 
 ### ⚡ Warp Guides (`docs/warp/`)
 - [Warp AI Features](docs/warp/warp-ai-features.md)
@@ -30,9 +68,6 @@ Given your Stack Deck + multi-monitor setup, iTerm2's saved arrangements + profi
 - [Warp xAI & Project Management](docs/warp/warp-xai-and-project-management.md)
 - [How Warp Makes Money](docs/warp/HOW_WARP_MAKES_MONEY.md)
 - [Git Commit History in Warp](docs/warp/git-commit-history.md)
-
-### 🖥️ iTerm2 (`docs/iterm2/`)
-- [Distinct color profiles and headlines (22 Aug 2026)](docs/iterm2/2026-08-22-distinct-color-profiles-and-headlines.md)
 
 ### ⚖️ Comparisons (`docs/comparisons/`)
 - [Why iTerm2 vs Warp with Claude](docs/comparisons/why-iterm-vs-warp-with-claude.md)

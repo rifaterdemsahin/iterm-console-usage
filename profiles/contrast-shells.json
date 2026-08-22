@@ -1,0 +1,84 @@
+{
+  "Profiles": [
+    {
+      "Name": "Navy White",
+      "Guid": "c0ntrast-navy-white-0001",
+      "Foreground Color": { "Red Component": 0.95, "Green Component": 0.97, "Blue Component": 1.0, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Background Color": { "Red Component": 0.05, "Green Component": 0.12, "Blue Component": 0.28, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Cursor Color": { "Red Component": 1.0, "Green Component": 0.84, "Blue Component": 0.0, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Badge Text": "NAVY"
+    },
+    {
+      "Name": "Crimson White",
+      "Guid": "c0ntrast-crimson-white-0002",
+      "Foreground Color": { "Red Component": 1.0, "Green Component": 0.97, "Blue Component": 0.94, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Background Color": { "Red Component": 0.45, "Green Component": 0.05, "Blue Component": 0.08, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Cursor Color": { "Red Component": 1.0, "Green Component": 0.92, "Blue Component": 0.4, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Badge Text": "CRIMSON"
+    },
+    {
+      "Name": "Forest Lime",
+      "Guid": "c0ntrast-forest-lime-0003",
+      "Foreground Color": { "Red Component": 0.75, "Green Component": 1.0, "Blue Component": 0.55, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Background Color": { "Red Component": 0.04, "Green Component": 0.18, "Blue Component": 0.08, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Cursor Color": { "Red Component": 1.0, "Green Component": 1.0, "Blue Component": 0.3, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Badge Text": "FOREST"
+    },
+    {
+      "Name": "Gold Black",
+      "Guid": "c0ntrast-gold-black-0004",
+      "Foreground Color": { "Red Component": 0.12, "Green Component": 0.09, "Blue Component": 0.0, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Background Color": { "Red Component": 0.95, "Green Component": 0.75, "Blue Component": 0.08, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Cursor Color": { "Red Component": 0.0, "Green Component": 0.0, "Blue Component": 0.0, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Badge Text": "GOLD"
+    },
+    {
+      "Name": "Magenta White",
+      "Guid": "c0ntrast-magenta-white-0005",
+      "Foreground Color": { "Red Component": 1.0, "Green Component": 0.95, "Blue Component": 1.0, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Background Color": { "Red Component": 0.42, "Green Component": 0.0, "Blue Component": 0.42, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Cursor Color": { "Red Component": 1.0, "Green Component": 0.85, "Blue Component": 0.2, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Badge Text": "MAGENTA"
+    },
+    {
+      "Name": "Cyan Black",
+      "Guid": "c0ntrast-cyan-black-0006",
+      "Foreground Color": { "Red Component": 0.02, "Green Component": 0.08, "Blue Component": 0.12, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Background Color": { "Red Component": 0.0, "Green Component": 0.78, "Blue Component": 0.85, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Cursor Color": { "Red Component": 0.0, "Green Component": 0.0, "Blue Component": 0.0, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Badge Text": "CYAN"
+    },
+    {
+      "Name": "Orange Black",
+      "Guid": "c0ntrast-orange-black-0007",
+      "Foreground Color": { "Red Component": 0.08, "Green Component": 0.04, "Blue Component": 0.0, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Background Color": { "Red Component": 0.95, "Green Component": 0.42, "Blue Component": 0.05, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Cursor Color": { "Red Component": 0.0, "Green Component": 0.0, "Blue Component": 0.0, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Badge Text": "ORANGE"
+    },
+    {
+      "Name": "Purple White",
+      "Guid": "c0ntrast-purple-white-0008",
+      "Foreground Color": { "Red Component": 0.96, "Green Component": 0.94, "Blue Component": 1.0, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Background Color": { "Red Component": 0.22, "Green Component": 0.08, "Blue Component": 0.48, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Cursor Color": { "Red Component": 1.0, "Green Component": 0.85, "Blue Component": 0.2, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Badge Text": "PURPLE"
+    },
+    {
+      "Name": "Slate Lime",
+      "Guid": "c0ntrast-slate-lime-0009",
+      "Foreground Color": { "Red Component": 0.72, "Green Component": 1.0, "Blue Component": 0.2, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Background Color": { "Red Component": 0.12, "Green Component": 0.14, "Blue Component": 0.18, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Cursor Color": { "Red Component": 1.0, "Green Component": 0.9, "Blue Component": 0.2, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Badge Text": "SLATE"
+    },
+    {
+      "Name": "White Navy",
+      "Guid": "c0ntrast-white-navy-0010",
+      "Foreground Color": { "Red Component": 0.05, "Green Component": 0.12, "Blue Component": 0.28, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Background Color": { "Red Component": 0.96, "Green Component": 0.97, "Blue Component": 1.0, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Cursor Color": { "Red Component": 0.85, "Green Component": 0.15, "Blue Component": 0.1, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Badge Text": "LIGHT"
+    }
+  ]
+}
