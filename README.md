@@ -31,5 +31,8 @@ Given your Stack Deck + multi-monitor setup, iTerm2's saved arrangements + profi
 - [How Warp Makes Money](docs/warp/HOW_WARP_MAKES_MONEY.md)
 - [Git Commit History in Warp](docs/warp/git-commit-history.md)
 
+### 🖥️ iTerm2 (`docs/iterm2/`)
+- [Distinct color profiles and headlines (22 Aug 2026)](docs/iterm2/2026-08-22-distinct-color-profiles-and-headlines.md)
+
 ### ⚖️ Comparisons (`docs/comparisons/`)
 - [Why iTerm2 vs Warp with Claude](docs/comparisons/why-iterm-vs-warp-with-claude.md)
