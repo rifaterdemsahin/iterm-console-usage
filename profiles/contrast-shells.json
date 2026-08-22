@@ -1,6 +1,14 @@
 {
   "Profiles": [
     {
+      "Name": "Matrix",
+      "Guid": "c0ntrast-matrix-green-0000",
+      "Foreground Color": { "Red Component": 0.0, "Green Component": 1.0, "Blue Component": 0.25, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Background Color": { "Red Component": 0.01, "Green Component": 0.03, "Blue Component": 0.02, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Cursor Color": { "Red Component": 0.0, "Green Component": 1.0, "Blue Component": 0.35, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Badge Text": "MATRIX"
+    },
+    {
       "Name": "Navy White",
       "Guid": "c0ntrast-navy-white-0001",
       "Foreground Color": { "Red Component": 0.95, "Green Component": 0.97, "Blue Component": 1.0, "Alpha Component": 1, "Color Space": "sRGB" },

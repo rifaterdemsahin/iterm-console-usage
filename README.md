@@ -22,26 +22,36 @@ Given your Stack Deck + multi-monitor setup, iTerm2's saved arrangements + profi
 
 ---
 
+> 🌐 **Live Documentation Portal**: [https://rifaterdemsahin.github.io/iterm-console-usage/](https://rifaterdemsahin.github.io/iterm-console-usage/)
+
+---
+
 ## 🛠️ iTerm2 Automation & Watermark Tools
 
-This repository includes CLI and shell tools to inspect running iTerm2 sessions, set watermark badges, lock session headlines, and apply high-contrast color palettes.
+This repository includes CLI and shell tools to inspect running iTerm2 sessions, set watermark badges, lock session headlines, and apply high-contrast color palettes (including classic Matrix Green & Black).
 
 ### Quick Commands
 
 ```bash
-# 1. List all active windows, panes, watermark badges, and running jobs
+# 1. Switch all active sessions to classic Matrix Green & Black theme:
+./scripts/iterm.sh matrix
+
+# 2. List all active windows, panes, watermark badges, and running jobs:
 ./scripts/iterm.sh list
 
-# 2. Add or update watermark badge on active pane (or specific session / all sessions)
+# 3. Save a markdown inventory snapshot of live sessions:
+./scripts/iterm.sh snapshot
+
+# 4. Add or update watermark badge on active pane (or specific session / all sessions):
 ./scripts/iterm.sh watermark --session current --text "NESO-PROD"
 
-# 3. Apply high-contrast palette with locked headline
-./scripts/iterm.sh style --session current --palette "Navy White" --headline "CLAUDE-MAIN"
+# 5. Apply high-contrast palette with locked headline:
+./scripts/iterm.sh style --session current --palette "Matrix" --headline "CLAUDE-MAIN"
 
-# 4. Auto-distribute distinct colors across all open sessions
+# 6. Auto-distribute distinct colors across all open sessions:
 ./scripts/iterm.sh auto-style --prefix "AGENT"
 
-# 5. Install Dynamic Profiles to macOS iTerm2 configuration
+# 7. Install Dynamic Profiles to macOS iTerm2 configuration:
 ./scripts/iterm.sh install-profiles
 ```
 

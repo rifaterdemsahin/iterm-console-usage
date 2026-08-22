@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation Viewer | iTerm2 & Warp Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Marked & Highlight.js -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+    <style>
+        :root {
+            --bg-primary: #050a06;
+            --bg-secondary: #0b140d;
+            --bg-card: #0f1c12;
+            --border-color: #1a3821;
+            --border-hover: #00ff66;
+            --accent-green: #00ff66;
+            --accent-glow: rgba(0, 255, 102, 0.18);
+            --text-primary: #e6f9ed;
+            --text-secondary: #9cb5a2;
+            --text-muted: #5e7a64;
+            --code-bg: #030804;
+            --inline-code-bg: #0d1e11;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Shared Navigation Menu */
+        .top-nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(5, 10, 6, 0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.85rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--accent-green);
+            font-family: 'Fira Code', monospace;
+            font-weight: 700;
+            font-size: 1.15rem;
+        }
+
+        .nav-brand .pulse-dot {
+            width: 10px;
+            height: 10px;
+            background-color: var(--accent-green);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent-green);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            padding: 0.4rem 0.75rem;
+            border-radius: 6px;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--accent-green);
+            background: var(--bg-card);
+        }
+
+        .nav-links .gh-btn {
+            border: 1px solid var(--border-color);
+            color: var(--accent-green);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .nav-links .gh-btn:hover {
+            border-color: var(--accent-green);
+            box-shadow: 0 0 12px var(--accent-glow);
+        }
+
+        /* Layout Container */
+        .layout {
+            display: flex;
+            flex: 1;
+            max-width: 1500px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 320px;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            padding: 1.75rem 1.25rem;
+            overflow-y: auto;
+            position: sticky;
+            top: 60px;
+            height: calc(100vh - 60px);
+        }
+
+        .sidebar-section-title {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--accent-green);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin: 1.5rem 0 0.6rem 0.5rem;
+        }
+
+        .sidebar-section-title:first-child {
+            margin-top: 0;
+        }
+
+        .sidebar-list {
+            list-style: none;
+        }
+
+        .sidebar-list li {
+            margin-bottom: 0.25rem;
+        }
+
+        .sidebar-list a {
+            display: block;
+            padding: 0.45rem 0.75rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.88rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .sidebar-list a:hover {
+            background: var(--bg-card);
+            color: var(--accent-green);
+        }
+
+        .sidebar-list a.active {
+            background: var(--bg-card);
+            color: var(--accent-green);
+            border-left: 3px solid var(--accent-green);
+            font-weight: 600;
+        }
+
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            padding: 2.5rem 3.5rem;
+            max-width: 980px;
+            margin: 0 auto;
+        }
+
+        /* Breadcrumbs & Header */
+        .doc-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 1.25rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .breadcrumbs {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .breadcrumbs span {
+            color: var(--accent-green);
+        }
+
+        .doc-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .action-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 0.4rem 0.85rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-family: 'Fira Code', monospace;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+        }
+
+        /* Markdown Styles */
+        .markdown-body {
+            line-height: 1.75;
+            font-size: 1rem;
+            color: var(--text-primary);
+        }
+
+        .markdown-body h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .markdown-body h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 2rem 0 1rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.4rem;
+        }
+
+        .markdown-body h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--accent-green);
+            margin: 1.5rem 0 0.75rem;
+        }
+
+        .markdown-body p {
+            margin-bottom: 1.2rem;
+        }
+
+        .markdown-body ul, .markdown-body ol {
+            margin-bottom: 1.2rem;
+            padding-left: 1.75rem;
+        }
+
+        .markdown-body li {
+            margin-bottom: 0.4rem;
+        }
+
+        .markdown-body a {
+            color: var(--accent-green);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        .markdown-body code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9em;
+            background: var(--inline-code-bg);
+            border: 1px solid var(--border-color);
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            color: #8effab;
+        }
+
+        .markdown-body pre {
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .markdown-body pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            color: inherit;
+            font-size: 0.88rem;
+        }
+
+        .markdown-body table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.92rem;
+            background: var(--bg-card);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .markdown-body th, .markdown-body td {
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            text-align: left;
+        }
+
+        .markdown-body th {
+            background: var(--bg-secondary);
+            color: var(--accent-green);
+            font-weight: 700;
+        }
+
+        .markdown-body tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .markdown-body blockquote {
+            border-left: 4px solid var(--accent-green);
+            background: rgba(0, 255, 102, 0.05);
+            padding: 0.75rem 1.25rem;
+            margin: 1.25rem 0;
+            border-radius: 0 8px 8px 0;
+            color: var(--text-secondary);
+        }
+
+        .markdown-body hr {
+            border: none;
+            border-top: 1px solid var(--border-color);
+            margin: 2.5rem 0;
+        }
+
+        /* Loading / Error States */
+        .loading-state, .error-state {
+            padding: 4rem 2rem;
+            text-align: center;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .spinner {
+            width: 36px;
+            height: 36px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--accent-green);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 1.5rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 900px) {
+            .layout { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; position: static; }
+            .content-area { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Shared Top Navigation -->
+    <nav class="top-nav">
+        <a href="index.html" class="nav-brand">
+            <div class="pulse-dot"></div>
+            <span>CONSOLE_HUB // AGY</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html">🏠 Home</a></li>
+            <li><a href="markdown_renderer.html?file=docs/iterm2/HOW_TO_USE_WATERMARKS_AND_PROFILES.md" class="active">🖥️ iTerm2 Tools</a></li>
+            <li><a href="markdown_renderer.html?file=docs/iterm2/2026-08-22-live-sessions-snapshot.md">📊 Live Snapshot</a></li>
+            <li><a href="markdown_renderer.html?file=docs/warp/warp-ai-features.md">⚡ Warp Docs</a></li>
+            <li><a href="markdown_renderer.html?file=docs/comparisons/why-iterm-vs-warp-with-claude.md">⚖️ Comparisons</a></li>
+            <li><a href="https://github.com/rifaterdemsahin/iterm-console-usage" target="_blank" class="gh-btn">🐙 GitHub</a></li>
+        </ul>
+    </nav>
+
+    <div class="layout">
+        <!-- Sidebar Document Selector -->
+        <aside class="sidebar">
+            <div class="sidebar-section-title">🖥️ iTerm2 Automation</div>
+            <ul class="sidebar-list">
+                <li><a href="markdown_renderer.html?file=docs/iterm2/HOW_TO_USE_WATERMARKS_AND_PROFILES.md" data-file="docs/iterm2/HOW_TO_USE_WATERMARKS_AND_PROFILES.md">Watermarks & Profiles Guide</a></li>
+                <li><a href="markdown_renderer.html?file=docs/iterm2/2026-08-22-live-sessions-snapshot.md" data-file="docs/iterm2/2026-08-22-live-sessions-snapshot.md">Live Sessions Snapshot</a></li>
+                <li><a href="markdown_renderer.html?file=docs/iterm2/2026-08-22-distinct-color-profiles-and-headlines.md" data-file="docs/iterm2/2026-08-22-distinct-color-profiles-and-headlines.md">Distinct Colors & Headlines Log</a></li>
+            </ul>
+
+            <div class="sidebar-section-title">⚡ Warp Guides</div>
+            <ul class="sidebar-list">
+                <li><a href="markdown_renderer.html?file=docs/warp/warp-ai-features.md" data-file="docs/warp/warp-ai-features.md">Warp AI Features</a></li>
+                <li><a href="markdown_renderer.html?file=docs/warp/warp-credits-usage.md" data-file="docs/warp/warp-credits-usage.md">Warp Credits Usage</a></li>
+                <li><a href="markdown_renderer.html?file=docs/warp/warp-xai-and-project-management.md" data-file="docs/warp/warp-xai-and-project-management.md">Warp xAI & Projects</a></li>
+                <li><a href="markdown_renderer.html?file=docs/warp/HOW_WARP_MAKES_MONEY.md" data-file="docs/warp/HOW_WARP_MAKES_MONEY.md">How Warp Makes Money</a></li>
+                <li><a href="markdown_renderer.html?file=docs/warp/git-commit-history.md" data-file="docs/warp/git-commit-history.md">Git Commit History in Warp</a></li>
+            </ul>
+
+            <div class="sidebar-section-title">⚖️ Comparisons & Overview</div>
+            <ul class="sidebar-list">
+                <li><a href="markdown_renderer.html?file=docs/comparisons/why-iterm-vs-warp-with-claude.md" data-file="docs/comparisons/why-iterm-vs-warp-with-claude.md">iTerm2 vs Warp (Claude)</a></li>
+                <li><a href="markdown_renderer.html?file=README.md" data-file="README.md">Project README</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="content-area">
+            <div class="doc-header">
+                <div class="breadcrumbs">
+                    <span>PATH:</span> <span id="docPath">Loading...</span>
+                </div>
+                <div class="doc-actions">
+                    <button class="action-btn" id="copyBtn" onclick="copyMarkdown()">📋 Copy Text</button>
+                    <a class="action-btn" id="rawBtn" target="_blank">📄 Raw File</a>
+                </div>
+            </div>
+
+            <div id="content" class="markdown-body">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>Fetching and rendering document...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let rawMarkdownContent = "";
+
+        // Parse query parameter
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        async function loadMarkdown() {
+            const targetFile = getQueryParam('file') || 'docs/iterm2/HOW_TO_USE_WATERMARKS_AND_PROFILES.md';
+            
+            document.getElementById('docPath').textContent = targetFile;
+            document.getElementById('rawBtn').href = targetFile;
+
+            // Highlight active sidebar item
+            document.querySelectorAll('.sidebar-list a').forEach(a => {
+                if (a.getAttribute('data-file') === targetFile) {
+                    a.classList.add('active');
+                } else {
+                    a.classList.remove('active');
+                }
+            });
+
+            try {
+                const response = await fetch(targetFile);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: Failed to load file ${targetFile}`);
+                }
+                rawMarkdownContent = await response.text();
+                
+                // Configure marked
+                marked.setOptions({
+                    highlight: function(code, lang) {
+                        const language = highlight.getLanguage(lang) ? lang : 'plaintext';
+                        return hljs.highlight(code, { language }).value;
+                    },
+                    gfm: true,
+                    breaks: true
+                });
+
+                // Custom link renderer to rewrite markdown links to internal renderer links
+                const renderer = new marked.Renderer();
+                const originalLink = renderer.link.bind(renderer);
+                renderer.link = function(href, title, text) {
+                    if (href && href.endsWith('.md') && !href.startsWith('http')) {
+                        // resolve relative path
+                        let resolved = href;
+                        if (targetFile.includes('/') && !href.startsWith('/')) {
+                            const baseDir = targetFile.substring(0, targetFile.lastIndexOf('/') + 1);
+                            resolved = baseDir + href;
+                            // clean ../
+                            while (resolved.includes('/../')) {
+                                resolved = resolved.replace(/[^\/]+\/\.\.\//, '');
+                            }
+                            resolved = resolved.replace(/^\.\//, '');
+                        }
+                        return `<a href="markdown_renderer.html?file=${encodeURIComponent(resolved)}" title="${title || ''}">${text}</a>`;
+                    }
+                    return originalLink(href, title, text);
+                };
+
+                document.getElementById('content').innerHTML = marked.parse(rawMarkdownContent, { renderer });
+                
+                // Highlight code blocks
+                hljs.highlightAll();
+
+                // Update page title
+                const firstHeading = document.querySelector('.markdown-body h1');
+                if (firstHeading) {
+                    document.title = firstHeading.innerText + " | iTerm2 & Warp Hub";
+                }
+
+            } catch (err) {
+                document.getElementById('content').innerHTML = `
+                    <div class="error-state">
+                        <h2 style="color: #ff5555; margin-bottom: 1rem;">⚠️ Unable to Load Document</h2>
+                        <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">${err.message}</p>
+                        <a href="index.html" class="action-btn">Return to Portal Home</a>
+                    </div>
+                `;
+            }
+        }
+
+        function copyMarkdown() {
+            if (!rawMarkdownContent) return;
+            navigator.clipboard.writeText(rawMarkdownContent).then(() => {
+                const btn = document.getElementById('copyBtn');
+                btn.textContent = '✅ Copied!';
+                setTimeout(() => { btn.textContent = '📋 Copy Text'; }, 2000);
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', loadMarkdown);
+    </script>
+</body>
+</html>

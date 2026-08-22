@@ -22,6 +22,13 @@ except ImportError:
 
 # Color palettes (matching dynamic profiles)
 PALETTES = {
+    "Matrix": {
+        "fg": (0.0, 1.0, 0.25),
+        "bg": (0.01, 0.03, 0.02),
+        "cursor": (0.0, 1.0, 0.35),
+        "badge_color": (0.0, 1.0, 0.25, 0.22),
+        "badge_default": "MATRIX"
+    },
     "Navy White": {
         "fg": (0.95, 0.97, 1.0),
         "bg": (0.05, 0.12, 0.28),
@@ -321,6 +328,33 @@ async def cmd_snapshot(connection, args):
     print(f"✅ Saved live session snapshot ({total_panes} sessions) to:\n   {output_path}")
 
 
+async def cmd_matrix(connection, args):
+    """Move all active sessions to the classic Matrix green and black theme while preserving their headline badges."""
+    app = await iterm2.async_get_app(connection)
+    all_sessions = await get_all_sessions(app)
+    
+    if not all_sessions:
+        print("No active iTerm2 sessions found.")
+        return
+
+    print(f"🟢 Applying Matrix (Classic Green & Black) to all {len(all_sessions)} active sessions...")
+
+    for win, tab, session in all_sessions:
+        badge = await session.async_get_variable("session.badge")
+        name = await session.async_get_variable("session.name")
+        headline = badge if badge and badge != "-" else name
+
+        await apply_style_to_session(
+            session=session,
+            palette_name="Matrix",
+            headline=headline,
+            lock_title=True
+        )
+        print(f"  • Matrix applied to session {session.session_id} (Badge: {headline})")
+
+    print(f"✅ All {len(all_sessions)} sessions switched to Matrix Green & Black theme.")
+
+
 async def cmd_auto_distribute(connection, args):
     """Automatically assign rotating distinct contrast palettes and headlines across all sessions."""
     app = await iterm2.async_get_app(connection)
@@ -403,6 +437,9 @@ Examples:
     p_snap = subparsers.add_parser("snapshot", help="Save a markdown inventory snapshot of all open windows and panes")
     p_snap.add_argument("--output", "-o", default=None, help="Custom output markdown file path")
 
+    # matrix
+    subparsers.add_parser("matrix", help="Switch all active sessions to the classic Matrix green & black theme while keeping headlines")
+
     # install-profiles
     subparsers.add_parser("install-profiles", help="Install contrast-shells.json into iTerm2 DynamicProfiles directory")
 
@@ -421,6 +458,8 @@ Examples:
             await cmd_style(connection, args)
         elif args.command == "auto-style":
             await cmd_auto_distribute(connection, args)
+        elif args.command == "matrix":
+            await cmd_matrix(connection, args)
         elif args.command == "snapshot":
             await cmd_snapshot(connection, args)
 

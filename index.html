@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iTerm2 & Warp Console Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #050a06;
+            --bg-secondary: #0b140d;
+            --bg-card: #0f1c12;
+            --bg-card-hover: #142819;
+            --border-color: #1a3821;
+            --border-hover: #00ff66;
+            --accent-green: #00ff66;
+            --accent-glow: rgba(0, 255, 102, 0.18);
+            --text-primary: #e6f9ed;
+            --text-secondary: #8da392;
+            --text-muted: #536958;
+            --code-bg: #030804;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Top Shared Navigation Menu */
+        .top-nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(5, 10, 6, 0.88);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.85rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--accent-green);
+            font-family: 'Fira Code', monospace;
+            font-weight: 700;
+            font-size: 1.15rem;
+        }
+
+        .nav-brand .pulse-dot {
+            width: 10px;
+            height: 10px;
+            background-color: var(--accent-green);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent-green);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.85); }
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            padding: 0.4rem 0.75rem;
+            border-radius: 6px;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--accent-green);
+            background: var(--bg-card);
+        }
+
+        .nav-links .gh-btn {
+            border: 1px solid var(--border-color);
+            color: var(--accent-green);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .nav-links .gh-btn:hover {
+            border-color: var(--accent-green);
+            box-shadow: 0 0 12px var(--accent-glow);
+        }
+
+        /* Hero Header */
+        .hero {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3.5rem 2rem 2rem;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            color: var(--accent-green);
+            background: rgba(0, 255, 102, 0.08);
+            border: 1px solid var(--border-color);
+            padding: 0.35rem 0.9rem;
+            border-radius: 100px;
+            margin-bottom: 1.25rem;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff 40%, var(--accent-green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            max-width: 750px;
+            margin: 0 auto 2rem;
+        }
+
+        /* Search & Filter */
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.85rem 1.25rem 0.85rem 2.75rem;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            border-color: var(--accent-green);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        /* Grid Sections */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem 4rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .section-header span {
+            color: var(--accent-green);
+        }
+
+        .doc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 3rem;
+        }
+
+        .doc-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .doc-card:hover {
+            transform: translateY(-3px);
+            background: var(--bg-card-hover);
+            border-color: var(--border-hover);
+            box-shadow: 0 8px 24px var(--accent-glow);
+        }
+
+        .card-tag {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            color: var(--accent-green);
+            background: rgba(0, 255, 102, 0.1);
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            align-self: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .card-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #ffffff;
+        }
+
+        .card-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.25rem;
+            flex-grow: 1;
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-family: 'Fira Code', monospace;
+        }
+
+        .card-footer .read-more {
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+
+        /* CLI Quick Cheat Sheet */
+        .cli-box {
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 3rem;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .cli-box-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            color: var(--accent-green);
+            font-size: 0.9rem;
+        }
+
+        .cli-code {
+            color: #d1fae5;
+            font-size: 0.88rem;
+            line-height: 1.8;
+            overflow-x: auto;
+        }
+
+        .cli-code .cmd { color: var(--accent-green); }
+        .cli-code .comment { color: var(--text-muted); }
+
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 2rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            background: var(--bg-secondary);
+        }
+
+        footer a {
+            color: var(--accent-green);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Shared Top Navigation -->
+    <nav class="top-nav">
+        <a href="index.html" class="nav-brand">
+            <div class="pulse-dot"></div>
+            <span>CONSOLE_HUB // AGY</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html" class="active">🏠 Home</a></li>
+            <li><a href="markdown_renderer.html?file=docs/iterm2/HOW_TO_USE_WATERMARKS_AND_PROFILES.md">🖥️ iTerm2 Tools</a></li>
+            <li><a href="markdown_renderer.html?file=docs/iterm2/2026-08-22-live-sessions-snapshot.md">📊 Live Snapshot</a></li>
+            <li><a href="markdown_renderer.html?file=docs/warp/warp-ai-features.md">⚡ Warp Docs</a></li>
+            <li><a href="markdown_renderer.html?file=docs/comparisons/why-iterm-vs-warp-with-claude.md">⚖️ Comparisons</a></li>
+            <li><a href="https://github.com/rifaterdemsahin/iterm-console-usage" target="_blank" class="gh-btn">🐙 GitHub</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Header -->
+    <header class="hero">
+        <div class="hero-badge">MACOS CONSOLE INTELLIGENCE & AUTOMATION</div>
+        <h1>iTerm2 & Warp Documentation Hub</h1>
+        <p>Dynamic profiling, session tracking, high-contrast matrix color schemes, watermark badges, and terminal architecture guides.</p>
+        
+        <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" class="search-input" placeholder="Search documentation, scripts, profiles, or commands...">
+        </div>
+    </header>
+
+    <main class="container">
+
+        <!-- Quick CLI Panel -->
+        <div class="cli-box">
+            <div class="cli-box-header">
+                <span>⚡ CLI Quick Cheat Sheet</span>
+                <span>Matrix Theme Activated</span>
+            </div>
+            <div class="cli-code">
+                <span class="comment"># Switch all live iTerm2 sessions to classic Matrix Green & Black theme:</span><br>
+                <span class="cmd">./scripts/iterm.sh matrix</span><br><br>
+                <span class="comment"># Inspect and list all active windows, panes, watermark badges & processes:</span><br>
+                <span class="cmd">./scripts/iterm.sh list</span><br><br>
+                <span class="comment"># Save a full inventory snapshot of live sessions to Markdown:</span><br>
+                <span class="cmd">./scripts/iterm.sh snapshot</span><br><br>
+                <span class="comment"># Apply custom watermark badge to current pane:</span><br>
+                <span class="cmd">./scripts/iterm.sh watermark --session current --text "PROD-SERVER"</span>
+            </div>
+        </div>
+
+        <!-- Section: iTerm2 Tools & Guides -->
+        <h2 class="section-header"><span>🖥️</span> iTerm2 Management & Profiles</h2>
+        <div class="doc-grid" id="itermGrid">
+            <a href="markdown_renderer.html?file=docs/iterm2/HOW_TO_USE_WATERMARKS_AND_PROFILES.md" class="doc-card">
+                <div>
+                    <span class="card-tag">GUIDE</span>
+                    <h3 class="card-title">Watermarks & Profiles Guide</h3>
+                    <p class="card-desc">Complete walkthrough of the Python API CLI, dynamic profiles, locked headlines, and in-terminal OSC escape sequences.</p>
+                </div>
+                <div class="card-footer">
+                    <span>docs/iterm2/</span>
+                    <span class="read-more">Read Guide →</span>
+                </div>
+            </a>
+
+            <a href="markdown_renderer.html?file=docs/iterm2/2026-08-22-live-sessions-snapshot.md" class="doc-card">
+                <div>
+                    <span class="card-tag">INVENTORY</span>
+                    <h3 class="card-title">Live Sessions Snapshot</h3>
+                    <p class="card-desc">Detailed tabular breakdown of all open windows, tabs, pane IDs, running jobs (Claude, Grok, ping), and directory paths.</p>
+                </div>
+                <div class="card-footer">
+                    <span>22 Aug 2026</span>
+                    <span class="read-more">View Snapshot →</span>
+                </div>
+            </a>
+
+            <a href="markdown_renderer.html?file=docs/iterm2/2026-08-22-distinct-color-profiles-and-headlines.md" class="doc-card">
+                <div>
+                    <span class="card-tag">ARCHITECTURE</span>
+                    <h3 class="card-title">Distinct Color Profiles Log</h3>
+                    <p class="card-desc">Design rationale and implementation history of the 10 contrast palettes, alpha watermarks, and title locking mechanism.</p>
+                </div>
+                <div class="card-footer">
+                    <span>22 Aug 2026</span>
+                    <span class="read-more">Read Architecture →</span>
+                </div>
+            </a>
+
+            <a href="markdown_renderer.html?file=README.md" class="doc-card">
+                <div>
+                    <span class="card-tag">OVERVIEW</span>
+                    <h3 class="card-title">Project README</h3>
+                    <p class="card-desc">Root project overview, fast CLI setup, environment details, and terminal feature comparisons.</p>
+                </div>
+                <div class="card-footer">
+                    <span>README.md</span>
+                    <span class="read-more">Open README →</span>
+                </div>
+            </a>
+        </div>
+
+        <!-- Section: Warp Terminal Guides -->
+        <h2 class="section-header"><span>⚡</span> Warp Terminal Knowledge Base</h2>
+        <div class="doc-grid" id="warpGrid">
+            <a href="markdown_renderer.html?file=docs/warp/warp-ai-features.md" class="doc-card">
+                <div>
+                    <span class="card-tag">AI TOOLS</span>
+                    <h3 class="card-title">Warp AI Features</h3>
+                    <p class="card-desc">Comprehensive review of Warp AI capabilities: Warp Drive, inline suggestions, agent mode, error debugging, and workflow automation.</p>
+                </div>
+                <div class="card-footer">
+                    <span>docs/warp/</span>
+                    <span class="read-more">Read Doc →</span>
+                </div>
+            </a>
+
+            <a href="markdown_renderer.html?file=docs/warp/warp-credits-usage.md" class="doc-card">
+                <div>
+                    <span class="card-tag">BILLING</span>
+                    <h3 class="card-title">Warp Credits Usage</h3>
+                    <p class="card-desc">Understanding AI credit consumption, quota limits, model choices, and optimization strategies in Warp.</p>
+                </div>
+                <div class="card-footer">
+                    <span>docs/warp/</span>
+                    <span class="read-more">Read Doc →</span>
+                </div>
+            </a>
+
+            <a href="markdown_renderer.html?file=docs/warp/warp-xai-and-project-management.md" class="doc-card">
+                <div>
+                    <span class="card-tag">WORKFLOW</span>
+                    <h3 class="card-title">Warp xAI & Project Management</h3>
+                    <p class="card-desc">Using Warp for multi-project workflows, team collaboration, session persistence, and developer task management.</p>
+                </div>
+                <div class="card-footer">
+                    <span>docs/warp/</span>
+                    <span class="read-more">Read Doc →</span>
+                </div>
+            </a>
+
+            <a href="markdown_renderer.html?file=docs/warp/HOW_WARP_MAKES_MONEY.md" class="doc-card">
+                <div>
+                    <span class="card-tag">ANALYSIS</span>
+                    <h3 class="card-title">How Warp Makes Money</h3>
+                    <p class="card-desc">In-depth breakdown of Warp's business model, enterprise tiering, cloud sync, team pricing, and AI monetisation strategies.</p>
+                </div>
+                <div class="card-footer">
+                    <span>docs/warp/</span>
+                    <span class="read-more">Read Doc →</span>
+                </div>
+            </a>
+
+            <a href="markdown_renderer.html?file=docs/warp/git-commit-history.md" class="doc-card">
+                <div>
+                    <span class="card-tag">GIT GUIDE</span>
+                    <h3 class="card-title">Git Commit History in Warp</h3>
+                    <p class="card-desc">Best practices, command formats, filtering techniques, and no-pager flags for browsing Git commit history inside Warp.</p>
+                </div>
+                <div class="card-footer">
+                    <span>docs/warp/</span>
+                    <span class="read-more">Read Doc →</span>
+                </div>
+            </a>
+        </div>
+
+        <!-- Section: Comparisons -->
+        <h2 class="section-header"><span>⚖️</span> Terminal Comparisons</h2>
+        <div class="doc-grid" id="compGrid">
+            <a href="markdown_renderer.html?file=docs/comparisons/why-iterm-vs-warp-with-claude.md" class="doc-card">
+                <div>
+                    <span class="card-tag">COMPARISON</span>
+                    <h3 class="card-title">Why iTerm2 vs Warp with Claude</h3>
+                    <p class="card-desc">In-depth feature-by-feature evaluation comparing iTerm2 with Claude/AGY vs Warp Terminal for developer power users.</p>
+                </div>
+                <div class="card-footer">
+                    <span>docs/comparisons/</span>
+                    <span class="read-more">Read Comparison →</span>
+                </div>
+            </a>
+        </div>
+
+    </main>
+
+    <footer>
+        <p>iTerm2 Console Usage & Automation Hub &copy; 2026 • Built for macOS Power Users • <a href="https://github.com/rifaterdemsahin/iterm-console-usage" target="_blank">GitHub Repository</a></p>
+    </footer>
+
+    <script>
+        // Live client-side search
+        const searchInput = document.getElementById('searchInput');
+        const cards = document.querySelectorAll('.doc-card');
+
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase().trim();
+            cards.forEach(card => {
+                const text = card.innerText.toLowerCase();
+                card.style.display = text.includes(term) ? 'flex' : 'none';
+            });
+        });
+    </script>
+</body>
+</html>
