@@ -193,11 +193,36 @@ async def apply_style_to_session(session, palette_name: str, headline: str = Non
     p = PALETTES[palette_name]
     profile = iterm2.LocalWriteOnlyProfile()
 
-    # Colors
+    # Base Colors
     profile.set_foreground_color(make_color(*p["fg"]))
     profile.set_background_color(make_color(*p["bg"]))
     profile.set_cursor_color(make_color(*p["cursor"]))
     profile.set_bold_color(make_color(*p["fg"]))
+    profile.set_cursor_text_color(iterm2.Color(0, 0, 0, 255))
+    profile.set_selection_color(iterm2.Color(0, 85, 34, 255))
+    profile.set_selected_text_color(iterm2.Color(255, 255, 255, 255))
+
+    # CRITICAL: minimum_contrast ensures agy/grok/cli output is always readable
+    profile.set_minimum_contrast(0.45)
+
+    # Full 16-color high-contrast ANSI mapping for CLI tools (Grok, AGY, Git)
+    if palette_name == "Matrix":
+        profile.set_ansi_0_color(iterm2.Color(62, 92, 70, 255))     # Soft Sage Black
+        profile.set_ansi_1_color(iterm2.Color(255, 92, 92, 255))    # Bright Coral Red
+        profile.set_ansi_2_color(iterm2.Color(0, 255, 102, 255))    # Matrix Neon Green
+        profile.set_ansi_3_color(iterm2.Color(255, 215, 0, 255))    # Gold / Yellow
+        profile.set_ansi_4_color(iterm2.Color(77, 184, 255, 255))   # Sky Blue
+        profile.set_ansi_5_color(iterm2.Color(255, 102, 204, 255))  # Neon Magenta
+        profile.set_ansi_6_color(iterm2.Color(0, 240, 255, 255))    # Bright Cyan
+        profile.set_ansi_7_color(iterm2.Color(230, 249, 237, 255))  # Crisp White
+        profile.set_ansi_8_color(iterm2.Color(107, 143, 116, 255))  # Readable Muted Sage
+        profile.set_ansi_9_color(iterm2.Color(255, 123, 123, 255))  # Bright Red
+        profile.set_ansi_10_color(iterm2.Color(85, 255, 136, 255))  # Bright Green
+        profile.set_ansi_11_color(iterm2.Color(255, 224, 102, 255)) # Bright Yellow
+        profile.set_ansi_12_color(iterm2.Color(128, 212, 255, 255)) # Bright Blue
+        profile.set_ansi_13_color(iterm2.Color(255, 153, 221, 255)) # Bright Magenta
+        profile.set_ansi_14_color(iterm2.Color(102, 247, 255, 255)) # Bright Cyan
+        profile.set_ansi_15_color(iterm2.Color(255, 255, 255, 255)) # Pure White
 
     # Tab color
     profile.set_use_tab_color(True)
@@ -208,7 +233,7 @@ async def apply_style_to_session(session, palette_name: str, headline: str = Non
     profile.set_badge_text(badge_text)
     profile.set_badge_color(make_color(*p["badge_color"]))
 
-    # Title locking
+    # Title locking (protects headline from agy/grok process titles)
     if lock_title:
         profile.set_allow_title_setting(False)
 
