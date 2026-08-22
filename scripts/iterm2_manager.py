@@ -22,11 +22,18 @@ except ImportError:
 
 # Color palettes (matching dynamic profiles)
 PALETTES = {
+    "Readable Pro": {
+        "fg": (0.94, 0.96, 0.99),
+        "bg": (0.05, 0.07, 0.09),
+        "cursor": (1.0, 0.84, 0.0),
+        "badge_color": (1.0, 1.0, 1.0, 0.08),
+        "badge_default": "PRO"
+    },
     "Matrix": {
         "fg": (0.0, 1.0, 0.25),
         "bg": (0.01, 0.03, 0.02),
         "cursor": (0.0, 1.0, 0.35),
-        "badge_color": (0.0, 1.0, 0.25, 0.22),
+        "badge_color": (0.0, 1.0, 0.25, 0.15),
         "badge_default": "MATRIX"
     },
     "Navy White": {
@@ -353,6 +360,33 @@ async def cmd_snapshot(connection, args):
     print(f"✅ Saved live session snapshot ({total_panes} sessions) to:\n   {output_path}")
 
 
+async def cmd_readable(connection, args):
+    """Switch all active sessions to the ultra-readable crisp silver-white & deep charcoal theme with 50% contrast boost."""
+    app = await iterm2.async_get_app(connection)
+    all_sessions = await get_all_sessions(app)
+    
+    if not all_sessions:
+        print("No active iTerm2 sessions found.")
+        return
+
+    print(f"✨ Applying Readable Pro (Ultra-Crisp Silver & Deep Charcoal) to all {len(all_sessions)} active sessions...")
+
+    for win, tab, session in all_sessions:
+        badge = await session.async_get_variable("session.badge")
+        name = await session.async_get_variable("session.name")
+        headline = badge if badge and badge != "-" else name
+
+        await apply_style_to_session(
+            session=session,
+            palette_name="Readable Pro",
+            headline=headline,
+            lock_title=True
+        )
+        print(f"  • Readable Pro applied to session {session.session_id} (Badge: {headline})")
+
+    print(f"✅ All {len(all_sessions)} sessions switched to Ultra-Readable Pro theme.")
+
+
 async def cmd_matrix(connection, args):
     """Move all active sessions to the classic Matrix green and black theme while preserving their headline badges."""
     app = await iterm2.async_get_app(connection)
@@ -462,6 +496,9 @@ Examples:
     p_snap = subparsers.add_parser("snapshot", help="Save a markdown inventory snapshot of all open windows and panes")
     p_snap.add_argument("--output", "-o", default=None, help="Custom output markdown file path")
 
+    # readable / clean
+    subparsers.add_parser("readable", help="Switch all active sessions to Ultra-Readable Pro (Crisp Silver & Deep Charcoal)")
+
     # matrix
     subparsers.add_parser("matrix", help="Switch all active sessions to the classic Matrix green & black theme while keeping headlines")
 
@@ -483,6 +520,8 @@ Examples:
             await cmd_style(connection, args)
         elif args.command == "auto-style":
             await cmd_auto_distribute(connection, args)
+        elif args.command == "readable":
+            await cmd_readable(connection, args)
         elif args.command == "matrix":
             await cmd_matrix(connection, args)
         elif args.command == "snapshot":

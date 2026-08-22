@@ -1,6 +1,33 @@
 {
   "Profiles": [
     {
+      "Name": "Readable Pro",
+      "Guid": "c0ntrast-readable-pro-0000",
+      "Foreground Color": { "Red Component": 0.94, "Green Component": 0.96, "Blue Component": 0.99, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Background Color": { "Red Component": 0.05, "Green Component": 0.07, "Blue Component": 0.09, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Cursor Color": { "Red Component": 1.0, "Green Component": 0.84, "Blue Component": 0.0, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Minimum Contrast": 0.50,
+      "Selection Color": { "Red Component": 0.15, "Green Component": 0.30, "Blue Component": 0.52, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Selected Text Color": { "Red Component": 1.0, "Green Component": 1.0, "Blue Component": 1.0, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Ansi 0 Color": { "Red Component": 0.28, "Green Component": 0.31, "Blue Component": 0.35, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Ansi 1 Color": { "Red Component": 1.0, "Green Component": 0.48, "Blue Component": 0.45, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Ansi 2 Color": { "Red Component": 0.49, "Green Component": 0.91, "Blue Component": 0.53, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Ansi 3 Color": { "Red Component": 0.95, "Green Component": 0.80, "Blue Component": 0.38, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Ansi 4 Color": { "Red Component": 0.47, "Green Component": 0.75, "Blue Component": 1.0, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Ansi 5 Color": { "Red Component": 0.82, "Green Component": 0.66, "Blue Component": 1.0, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Ansi 6 Color": { "Red Component": 0.34, "Green Component": 0.83, "Blue Component": 0.87, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Ansi 7 Color": { "Red Component": 0.94, "Green Component": 0.96, "Blue Component": 0.99, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Ansi 8 Color": { "Red Component": 0.55, "Green Component": 0.58, "Blue Component": 0.62, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Ansi 9 Color": { "Red Component": 1.0, "Green Component": 0.63, "Blue Component": 0.60, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Ansi 10 Color": { "Red Component": 0.65, "Green Component": 0.95, "Blue Component": 0.67, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Ansi 11 Color": { "Red Component": 0.98, "Green Component": 0.88, "Blue Component": 0.54, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Ansi 12 Color": { "Red Component": 0.65, "Green Component": 0.84, "Blue Component": 1.0, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Ansi 13 Color": { "Red Component": 0.90, "Green Component": 0.79, "Blue Component": 1.0, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Ansi 14 Color": { "Red Component": 0.56, "Green Component": 0.90, "Blue Component": 0.93, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Ansi 15 Color": { "Red Component": 1.0, "Green Component": 1.0, "Blue Component": 1.0, "Alpha Component": 1, "Color Space": "sRGB" },
+      "Badge Text": "PRO"
+    },
+    {
       "Name": "Matrix",
       "Guid": "c0ntrast-matrix-green-0000",
       "Foreground Color": { "Red Component": 0.0, "Green Component": 1.0, "Blue Component": 0.25, "Alpha Component": 1, "Color Space": "sRGB" },

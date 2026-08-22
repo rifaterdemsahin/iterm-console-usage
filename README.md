@@ -33,13 +33,16 @@ This repository includes CLI and shell tools to inspect running iTerm2 sessions,
 ### Quick Commands
 
 ```bash
-# 1. Switch all active sessions to classic Matrix Green & Black theme:
+# 1. Switch all active sessions to Ultra-Readable Pro (Crisp Silver & Deep Charcoal):
+./scripts/iterm.sh readable
+
+# 2. Switch all active sessions to classic Matrix Green & Black theme:
 ./scripts/iterm.sh matrix
 
-# 2. List all active windows, panes, watermark badges, and running jobs:
+# 3. List all active windows, panes, watermark badges, and running jobs:
 ./scripts/iterm.sh list
 
-# 3. Save a markdown inventory snapshot of live sessions:
+# 4. Save a markdown inventory snapshot of live sessions:
 ./scripts/iterm.sh snapshot
 
 # 4. Add or update watermark badge on active pane (or specific session / all sessions):
