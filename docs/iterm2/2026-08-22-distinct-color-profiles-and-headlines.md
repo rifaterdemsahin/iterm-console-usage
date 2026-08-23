@@ -134,20 +134,13 @@ Headlines stay first in the tab. The job name still appends in parentheses (`CLA
 Palette reuse across *windows* is intentional (10 colors, 16 panes). Headlines are unique globally.
 
 ## How to re-apply later
-
-1. Confirm Python API: iTerm2 → Settings → General → Magic → **Enable Python API**.
-2. Profiles should already appear under **Profiles** from `contrast-shells.json`.
-3. Per pane, either:
-   - Session → Change Profile → pick a contrast name, or
-   - Re-run a small `iterm2` script that sets `LocalWriteOnlyProfile` colors + `badge_text` + `async_set_name`.
-4. To keep headlines from being overwritten: leave `allow_title_setting` off on those sessions.
-
-Manual assign without script: click pane → **Session → Change Profile**.
-
-## What was not done
-
-- Did not rewrite the static `Default` / `color` bookmarks in `com.googlecode.iterm2.plist`.
-- Did not save a window arrangement.
-- Did not kill leftover jobs (`ping 1.1.1.1`, `http.server`, `server.py --port 8775`).
-- Did not persist the `/tmp/iterm2api` venv.
-- Color application is **per live session**. New panes still spawn from Default until you pick a profile or re-run the restyle.
+ 
+ 1. Confirm Python API: iTerm2 → Settings → General → Magic → **Enable Python API**.
+ 2. Profiles should already appear under **Profiles** from `contrast-shells.json` and `default-matrix.json`.
+ 3. Per pane, either:
+    - Session → Change Profile → pick a contrast name, or
+    - Re-run a small `iterm2` script that sets `LocalWriteOnlyProfile` colors + `badge_text` + `async_set_name`.
+ 4. To keep headlines from being overwritten: leave `allow_title_setting` off on those sessions.
+ 
+- **Manual GUI Fix without script**: Click pane → **Session** → **Edit Session...** (or `⌘I`) → **General** (or **Colors**) to override or restore profile settings and background colors.
+- **Quick profile swap**: Click pane → **Session** → **Change Profile**.

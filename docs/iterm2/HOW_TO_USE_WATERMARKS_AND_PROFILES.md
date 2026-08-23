@@ -97,10 +97,25 @@ iterm_bg_color "#0d1b2a"
 
 ---
 
+## 🔧 Manual GUI Fix (Session Settings)
+
+If a session's background color is stuck (e.g. from an old profile or setting) or you want to manually adjust colors/badges directly in the iTerm2 GUI without running commands:
+
+1. Click into the target pane/session.
+2. From the top macOS menu bar, go to: **Session** → **Edit Session...** (or press `⌘I`).
+3. Navigate to **General** (or **Colors**) to directly customize:
+   - Profile settings & defaults
+   - Background and Foreground colors
+   - Badge text & alpha watermark opacity
+4. Alternatively, quickly swap the palette via **Session** → **Change Profile** and select any profile (e.g., *Matrix*, *Readable Pro*, *Navy White*).
+
+---
+
 ## 🛠️ Architecture & Files
 
 - **`scripts/iterm.sh`**: Zero-dependency bash runner that auto-configures a Python virtual environment and invokes the manager CLI.
 - **`scripts/iterm2_manager.py`**: Python API tool implementing session inspection, badge setting, locked headlines, and palette styling.
 - **`scripts/watermark_helpers.sh`**: ANSI OSC escape sequence functions for instant in-terminal control.
 - **`profiles/contrast-shells.json`**: Dynamic Profile definitions with 10 high-contrast themes.
+- **`profiles/default-matrix.json`**: Dynamic Profile setting Default profile to Matrix theme.
 - **`docs/iterm2/2026-08-22-distinct-color-profiles-and-headlines.md`**: Initial design inventory and rationale.

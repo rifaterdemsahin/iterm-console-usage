@@ -58,6 +58,13 @@ This repository includes CLI and shell tools to inspect running iTerm2 sessions,
 ./scripts/iterm.sh install-profiles
 ```
 
+### 🔧 Manual GUI Fix (Session Settings)
+If background color or profile is stuck in any session:
+1. Click the pane/session.
+2. From the menu bar: **Session** → **Edit Session...** (or `⌘I`).
+3. Under **General** (or **Colors**), adjust or reset the profile and background color.
+4. Alternatively: **Session** → **Change Profile** → choose **Matrix** or **Readable Pro**.
+
 ### In-Session Shell Escape Helpers (No Python Required)
 
 ```bash
@@ -72,6 +79,7 @@ iterm_clear_badge          # Clear badge
 ## 📚 Documentation Index
 
 ### 🖥️ iTerm2 (`docs/iterm2/`)
+- [iTerm2 Badge Settings: Multi-Session Management Tactic](docs/iterm2/iterm2-badge-management-tactic.md)
 - [Live Sessions Snapshot (22 Aug 2026)](docs/iterm2/2026-08-22-live-sessions-snapshot.md)
 - [How to Use Watermarks & Profiles Guide](docs/iterm2/HOW_TO_USE_WATERMARKS_AND_PROFILES.md)
 - [Distinct Color Profiles & Headlines Log](docs/iterm2/2026-08-22-distinct-color-profiles-and-headlines.md)
@@ -83,5 +91,6 @@ iterm_clear_badge          # Clear badge
 - [How Warp Makes Money](docs/warp/HOW_WARP_MAKES_MONEY.md)
 - [Git Commit History in Warp](docs/warp/git-commit-history.md)
 
-### ⚖️ Comparisons (`docs/comparisons/`)
+### ⚖️ Comparisons & Alternatives (`docs/comparisons/`)
 - [Why iTerm2 vs Warp with Claude](docs/comparisons/why-iterm-vs-warp-with-claude.md)
+- [chromeTerminal: Browser-Native Terminal Alternative](docs/comparisons/chrome-terminal-browser-alternative.md)
